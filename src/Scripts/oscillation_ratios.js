@@ -38,7 +38,7 @@ window.onload = function() {
 	function updateRatioText() {
 		ctx.fillStyle = "rgb(0,0,0)";
 		ctx.font = "40px Arial";
-		ctx.fillText(`X: ${Math.round(xSpeed*100)}, Y: ${Math.round(ySpeed*100)}`, 200, 100);
+		ctx.fillText(`X: ${Math.round(xSpeed*100)}, Y: ${Math.round(ySpeed*100)}`, width/2, height-100);
 	}
 
 	render();
