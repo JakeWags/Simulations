@@ -108,4 +108,11 @@ window.onload = function() {
 	}
 
 	update();
+
+	let v1 = new Vector(1,0);
+	let v2 = new Vector(1,2);
+
+	console.log(v1.dot(v2));
+	console.log(v1.angleBetween(v2));
+	console.log(v1.cross(v2));
 }

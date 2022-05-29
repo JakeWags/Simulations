@@ -127,4 +127,23 @@ class Vector {
 		this.#x /= val;
 		this.#y /= val;
 	}
+
+	// dot product
+	// ac + bd
+	// <a,b> . <c,d>
+	dot(v2) {
+		return (this.#x*v2.getX() + this.#y*v2.getY());
+	}
+
+	// cross product. In 2D: returns a pseudoscalar
+	// ad - bc
+	// <a,b> x <c,d>
+	cross(v2) {
+		return (this.#x*v2.getY() - this.#y*v2.getX());
+	}
+
+	// dot product method for finding the angle between v1 and v2
+	angleBetween(v2) {
+		return Math.acos((this.dot(v2)/(this.getLength()*v2.getLength())));
+	}
 }
