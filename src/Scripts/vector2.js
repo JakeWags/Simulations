@@ -88,7 +88,10 @@ window.onload = function() {
 
 	const applyThrust = () => {
 		if (thrusting) {
-			//to be implemented
+			thrust.setX(Math.cos(shipAngle) * 0.1);
+			thrust.setY(Math.sin(shipAngle) * 0.1);
+		} else {
+			thrust.setLength(0);
 		}
 	}
 
@@ -108,11 +111,4 @@ window.onload = function() {
 	}
 
 	update();
-
-	let v1 = new Vector(1,0);
-	let v2 = new Vector(1,2);
-
-	console.log(v1.dot(v2));
-	console.log(v1.angleBetween(v2));
-	console.log(v1.cross(v2));
 }
