@@ -12,10 +12,7 @@ let locA = {
 	r: 100
 }
 
-let vA = {
-	new Vector(0, 0.5);
-
-};
+let vA = new Vector(0, 0.5);
 
 let locB = {
 	x: 120,
@@ -41,8 +38,8 @@ const update = () => {
 	ctx.stroke()
 
 newLoc = {
-	x: locA.x + vA.x
-	y: LoA.y + vA.y
+	x: locA.x + vA.x,
+	y: locA.y + vA.y
 }
 requestAnimationFrame(update);
 
