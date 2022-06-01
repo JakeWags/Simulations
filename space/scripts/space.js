@@ -27,10 +27,10 @@ window.onload = function() {
 				turningLeft = true;
 				break;
 			case "ArrowUp":
-				thrusting = true;
+				ship2.thrusting = true;
 				break;
-			case "Space":
-				shooting = true;
+			case " ":
+				ship2.shooting = true;
 				break;
 		}
 	}
@@ -44,11 +44,11 @@ window.onload = function() {
 				turningLeft = false;
 				break;
 			case "ArrowUp":
-				thrusting = false;
+				ship2.thrusting = false;
 				break;
-			case "Space":
-				shooting = false;
-				break;
+/*			case " ":
+				ship2.shooting = false;
+				break;*/
 		}
 	}
 
@@ -57,18 +57,18 @@ window.onload = function() {
 
 
 	const edgeWrap = () => {
-		if (ship.getPosition().getX() > width) { // right wrap to left
-			ship.getPosition().setX(0);
+		if (ship2.getPosition().getX() > width) { // right wrap to left
+			ship2.getPosition().setX(0);
 		}
-		if (ship.getPosition().getX() < 0) { // left wrap to right
-			ship.getPosition().setX(width);
+		if (ship2.getPosition().getX() < 0) { // left wrap to right
+			ship2.getPosition().setX(width);
 		}
 
-		if (ship.getPosition().getY() > height) { // bottom wrap to top
-			ship.getPosition().setY(0);
+		if (ship2.getPosition().getY() > height) { // bottom wrap to top
+			ship2.getPosition().setY(0);
 		}
-		if (ship.getPosition().getY() < 0) { // top wrap to bottom
-			ship.getPosition().setY(height);
+		if (ship2.getPosition().getY() < 0) { // top wrap to bottom
+			ship2.getPosition().setY(height);
 		}
 	}
 
@@ -91,16 +91,18 @@ window.onload = function() {
 	const rotate = () => {
 		if (turningLeft) {
 			ship2.rotateRad(-0.05);
-			//return shipAngle -= 0.05;
 		}
 		if (turningRight) {
 			ship2.rotateRad(0.05);
-			//return shipAngle += 0.05;
 		}
 	}
 
+	const shoot = () => {
+		ship2.shoot();
+	}
+
 	const applyThrust = () => {
-		if (thrusting) {
+		if (ship2.thrusting) {
 			thrust.setX(Math.cos(ship2.getAngle()) * 0.1);
 			thrust.setY(Math.sin(ship2.getAngle()) * 0.1);
 		} else {
@@ -108,38 +110,18 @@ window.onload = function() {
 		}
 	}
 
-
-
-
 	let delta = Date.now();
 
-	console.log(ship2.getPosition());
-
-	let c = {
-		x:100,
-		y:100
-	}
 	const update = () => {
 		ctx.clearRect(0, 0, width, height);
 		delta = Date.now() - delta;
 
-		ship2.draw(ctx);
-
 		rotate();
 		applyThrust();
 		ship2.accelerate(thrust);
-		ship2.update();
+		ship2.update(ctx);
 
-
-		ctx.beginPath();
-		ctx.fillStyle = "red";
-		ctx.arc(c.x, c.y, 30, 0, Math.PI*2, false);
-		ctx.fill();
-		c.x+=0.1;
-
-		// edgeWrap();
-
-		// drawShip();
+		edgeWrap();
 
 		requestAnimationFrame(update);
 	}
