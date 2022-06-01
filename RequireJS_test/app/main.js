@@ -10,9 +10,9 @@ define(function (require) {
     let Vector = require('Vector');
     let Particle = require('Particle');
     let canvas = require('./canvas');
+    let test = require('./test');
 
     let v1 = new Vector(1,10);
-    print(v1.getLength());
 
     let p1 = new Particle(100,100);
 
