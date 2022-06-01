@@ -34,6 +34,6 @@ class Bullet extends Particle {
 	// returns a vector position
 	getBulletTip() {
 		let points = this.#computeBulletPoints();
-		return new Vector(points[0][0],points[0][1]);
+		return new Vector(points[1][0],points[1][1]);
 	}
 }
