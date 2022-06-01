@@ -4,10 +4,12 @@ class Ship extends Particle {
 	thrusting = false;
 	static shipLength = 30;
 	#bullets = [];
+	#points;
 
 	constructor(x = 50, y = 50, angle = 0, speed = 0) {
 		super(x,y,speed,angle);
 		this.#angle = angle;
+		this.#points = Ship.getAbsolutePoints(this.#angle);
 	}
 
 	getAngle() { return this.#angle; }
@@ -24,7 +26,7 @@ class Ship extends Particle {
 	}
 		
 	// absolute coordinates relative to the base canvas
-	static getAbsolutePoints() {
+	static getAbsolutePoints(angle) {
 		/*
 			dY = rsin(theta)
 			dX = r - rcos(theta)
@@ -33,10 +35,10 @@ class Ship extends Particle {
 		*/
 
 		return [
-			[Ship.shipLength*Math.cos(this.#angle), Ship.shipLength*Math.sin(this.#angle)],
-			[Ship.shipLength/2*Math.cos(this.#angle+4*Math.PI/6),Ship.shipLength/2*Math.sin(this.#angle+4*Math.PI/6)],
-			[Ship.shipLength/2*Math.cos(this.#angle), Ship.shipLength/2*Math.sin(this.#angle)],
-			[Ship.shipLength/2*Math.cos(this.#angle-4*Math.PI/6),Ship.shipLength/2*Math.sin(this.#angle-4*Math.PI/6)]
+			[Ship.shipLength*Math.cos(angle), Ship.shipLength*Math.sin(angle)],
+			[Ship.shipLength/2*Math.cos(angle+4*Math.PI/6),Ship.shipLength/2*Math.sin(angle+4*Math.PI/6)],
+			[Ship.shipLength/2*Math.cos(angle), Ship.shipLength/2*Math.sin(angle)],
+			[Ship.shipLength/2*Math.cos(angle-4*Math.PI/6),Ship.shipLength/2*Math.sin(angle-4*Math.PI/6)]
 			];
 	}
 
@@ -84,10 +86,11 @@ class Ship extends Particle {
 
 		ctx.restore();
 
-		this.drawBullets(ctx);
+		this.#drawBullets(ctx);
+		this.#deleteBullets();
 	}
 
-	#computeBulletSpeed() {
+	#computeBulletVelocity() {
 		// needs to account for the speed of the ship relative to the direction the bullet is travelling
 		// bullet shoots out at Bullet.bulletSpeed
 		let bVel = new Vector(0,0);
@@ -95,20 +98,31 @@ class Ship extends Particle {
 		bVel.setAngle(this.#angle);
 
 		let sVel = super.getVelocity();
-		return (sVel.add(bVel)).getLength();
+		return sVel.add(bVel);
 	}
 
 	shoot() {
-		let bSpeed = this.#computeBulletSpeed();
 		if (this.shooting) {
+			let bVel = this.#computeBulletVelocity();
+			this.#points = Ship.getAbsolutePoints(this.#angle);
 			this.shooting = false;
-			this.#bullets.push(new Bullet(super.getX(), super.getY(), bSpeed, this.#angle));
+			this.#bullets.push(new Bullet(this.#points[0][0]+super.getX(), super.getY()+this.#points[0][1], bVel.getLength(), bVel.getAngle()));
 		}
 	}
 
-	drawBullets(ctx) {
+	#drawBullets(ctx) {
 		this.#bullets.forEach((e) => {
 			e.draw(ctx);
 		});
 	}
+
+	#deleteBullets() {
+		this.#bullets.forEach((e) => {
+			if (e.getX() > window.innerWidth || e.getX() < 0 || e.getY() < 0 || e.getY() > window.innerHeight) {
+				this.#bullets = this.#bullets.filter(b => b !== e); // filter the array for everything other than the bullet to delete
+			}
+		});
+		console.log(this.#bullets.length);
+	}
+
 }
