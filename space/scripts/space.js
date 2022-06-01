@@ -115,6 +115,10 @@ window.onload = function() {
 
 	console.log(ship2.getPosition());
 
+	let c = {
+		x:100,
+		y:100
+	}
 	const update = () => {
 		ctx.clearRect(0, 0, width, height);
 		delta = Date.now() - delta;
@@ -125,6 +129,14 @@ window.onload = function() {
 		applyThrust();
 		ship2.accelerate(thrust);
 		ship2.update();
+
+
+		ctx.beginPath();
+		ctx.fillStyle = "red";
+		ctx.arc(c.x, c.y, 30, 0, Math.PI*2, false);
+		ctx.fill();
+		c.x+=0.1;
+
 		// edgeWrap();
 
 		// drawShip();

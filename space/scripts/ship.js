@@ -1,7 +1,7 @@
 class Ship extends Particle {
 	#angle = 0;
 	shooting = false;
-	shipLength = 50;
+	shipLength = 30;
 
 	constructor(x = 50, y = 50, angle = 0, speed = 0) {
 		super(x,y,speed,angle);
@@ -21,28 +21,51 @@ class Ship extends Particle {
 		this.rotateRad(degrees*(Math.PI/180));
 	}
 		
+
+	#computePoints() {
+		/*
+			dY = rsin(theta)
+			dX = r - rcos(theta)
+
+			polar to cartesian conversions
+		*/
+		return [
+			[this.shipLength*Math.cos(this.#angle), this.shipLength*Math.sin(this.#angle)],
+			[this.shipLength/2*Math.cos(this.#angle+4*Math.PI/6),this.shipLength/2*Math.sin(this.#angle+4*Math.PI/6)],
+			[this.shipLength/2*Math.cos(this.#angle), this.shipLength/2*Math.sin(this.#angle)],
+			[this.shipLength/2*Math.cos(this.#angle-4*Math.PI/6),this.shipLength/2*Math.sin(this.#angle-4*Math.PI/6)]
+			];
+	}
+
 	draw(ctx) {
-		//ctx.save();
-		//ctx.translate(this.getX(), this.getY());
-		//ctx.rotate(this.#angle);
-
-		// ctx.beginPath();
-		// ctx.moveTo(super.getX()+10, super.getY());
-		// ctx.lineTo(super.getX()-10, super.getY()-7);
-		// ctx.lineTo(super.getX()-10, super.getY()+7);
-		// ctx.lineTo(super.getX()+10, super.getY());
-		// ctx.fill();
-		// ctx.stroke();
-
+		// ctx.fillStyle = "white";
+		//let points = this.#computePoints();
+		
+		ctx.save();
+		ctx.translate(this.getX(), this.getY());
+		ctx.rotate(this.#angle);
 		ctx.beginPath();
-		ctx.moveTo(this.shipLength*Math.cos(this.#angle)+(super.getX()), this.shipLength*Math.sin(this.#angle)+(super.getY()));
-		ctx.lineTo(this.shipLength*Math.cos(this.#angle)+(super.getX()), this.shipLength*Math.sin(this.#angle)+(super.getY()));
-		ctx.lineTo(this.shipLength/3*Math.cos(this.#angle+Math.PI/2)+super.getX(),this.shipLength/3*Math.sin(this.#angle+Math.PI/2)+(super.getY()));
-		ctx.lineTo(this.shipLength/3*Math.cos(this.#angle-Math.PI/2)+super.getX(),this.shipLength/3*Math.sin(this.#angle-Math.PI/2)+super.getY());
-		ctx.lineTo(this.shipLength*Math.cos(this.#angle)+(super.getX()), this.shipLength*Math.sin(this.#angle)+(super.getY()));
-		//ctx.fill();
+		ctx.moveTo(0,0);
+
+		ctx.lineTo(this.shipLength, 0);
+		ctx.lineTo(-this.shipLength/2, -this.shipLength/3);
+		ctx.lineTo(-this.shipLength/3, 0);
+		ctx.lineTo(-this.shipLength/2, this.shipLength/3);
+		ctx.lineTo(this.shipLength, 0);
+		ctx.strokeStyle = "orange";
 		ctx.stroke();
 
-		//ctx.restore();
+		// context rotation works totally fine. I just had this.angle rather than this.#angle, so javascript wasn't throwing any errors
+
+		// ctx.lineTo(points[0][0], points[0][1]);
+		// ctx.lineTo(points[1][0],points[1][1]);
+		// ctx.lineTo(points[2][0], points[2][1]);
+		// ctx.lineTo(points[3][0], points[3][1]);
+		// ctx.lineTo(points[0][0],points[0][1]);
+		//ctx.fill();
+
+
+
+		ctx.restore();
 	}
 }
