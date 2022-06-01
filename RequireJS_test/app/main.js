@@ -11,22 +11,16 @@ define(function (require) {
     let Particle = require('Particle');
     let canvas = require('./canvas');
 
-
-    print(messages.getHello());
-
     let v1 = new Vector(1,10);
     print(v1.getLength());
 
     let p1 = new Particle(100,100);
-    print(p1.angleBetweenPoint(100,400));
 
-    //let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext('2d');
-    let height = canvas.height = window.height;
-    let width = canvas.width = window.width;
+    let height = canvas.height = window.innerHeight;
+    let width = canvas.width = window.innerWidth;
 
-    console.log(canvas.width);
-    console.log(canvas.height);
+    ctx.beginPath();
+    ctx.arc(100, 100, 10, 0, Math.PI*2, false);
+    ctx.fill();
 });
-
-// canvas not working
