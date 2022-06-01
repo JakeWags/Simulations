@@ -1,6 +1,7 @@
 class Ship extends Particle {
 	#angle = 0;
 	shooting = false;
+	hasShot = false;
 	thrusting = false;
 	static shipLength = 30;
 	#bullets = [];
@@ -26,19 +27,18 @@ class Ship extends Particle {
 	}
 		
 	// absolute coordinates relative to the base canvas
-	static getAbsolutePoints(angle) {
+	static getAbsolutePoints(angle, x, y) {
 		/*
 			dY = rsin(theta)
 			dX = r - rcos(theta)
 
 			polar to cartesian conversions
 		*/
-
 		return [
-			[Ship.shipLength*Math.cos(angle), Ship.shipLength*Math.sin(angle)],
-			[Ship.shipLength/2*Math.cos(angle+4*Math.PI/6),Ship.shipLength/2*Math.sin(angle+4*Math.PI/6)],
-			[Ship.shipLength/2*Math.cos(angle), Ship.shipLength/2*Math.sin(angle)],
-			[Ship.shipLength/2*Math.cos(angle-4*Math.PI/6),Ship.shipLength/2*Math.sin(angle-4*Math.PI/6)]
+			[x+Ship.shipLength*Math.cos(angle), y+Ship.shipLength*Math.sin(angle)],
+			[x+Ship.shipLength/2*Math.cos(angle+4*Math.PI/6),y+Ship.shipLength/2*Math.sin(angle+4*Math.PI/6)],
+			[x-Ship.shipLength/2*Math.cos(angle), y-Ship.shipLength/2*Math.sin(angle)],
+			[x+Ship.shipLength/2*Math.cos(angle-4*Math.PI/6),y+Ship.shipLength/2*Math.sin(angle-4*Math.PI/6)]
 			];
 	}
 
@@ -68,6 +68,8 @@ class Ship extends Particle {
 		ctx.lineTo(Ship.shipLength, 0);
 		ctx.strokeStyle = "orange";
 		ctx.stroke();
+		ctx.fillStyle = "orange";
+		ctx.fill();
 
 
 		this.#drawFire(ctx);
@@ -102,11 +104,11 @@ class Ship extends Particle {
 	}
 
 	shoot() {
-		if (this.shooting) {
+		if (this.shooting && !this.hasShot) {
 			let bVel = this.#computeBulletVelocity();
-			this.#points = Ship.getAbsolutePoints(this.#angle);
-			this.shooting = false;
-			this.#bullets.push(new Bullet(this.#points[0][0]+super.getX(), super.getY()+this.#points[0][1], bVel.getLength(), bVel.getAngle()));
+			this.#points = Ship.getAbsolutePoints(this.#angle, super.getX(), super.getY());
+			this.#bullets.push(new Bullet(this.#points[0][0], this.#points[0][1], bVel.getLength(), bVel.getAngle(), this.#angle));
+			this.hasShot = true;
 		}
 	}
 
@@ -120,9 +122,9 @@ class Ship extends Particle {
 		this.#bullets.forEach((e) => {
 			if (e.getX() > window.innerWidth || e.getX() < 0 || e.getY() < 0 || e.getY() > window.innerHeight) {
 				this.#bullets = this.#bullets.filter(b => b !== e); // filter the array for everything other than the bullet to delete
+
 			}
 		});
-		console.log(this.#bullets.length);
 	}
 
 }

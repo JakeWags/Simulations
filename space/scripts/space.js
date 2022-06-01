@@ -19,6 +19,7 @@ window.onload = function() {
 
 
 	const keydown = (e) => {
+		console.log(e.key);
 		switch (e.key) {
 			case "ArrowRight":
 				turningRight = true;
@@ -46,9 +47,10 @@ window.onload = function() {
 			case "ArrowUp":
 				ship2.thrusting = false;
 				break;
-/*			case " ":
+			case " ":
+				ship2.hasShot = false;
 				ship2.shooting = false;
-				break;*/
+				break;
 		}
 	}
 
@@ -89,12 +91,13 @@ window.onload = function() {
 	}
 
 	const rotate = () => {
-		if (turningLeft) {
-			ship2.rotateRad(-0.05);
-		}
 		if (turningRight) {
 			ship2.rotateRad(0.05);
 		}
+		if (turningLeft) {
+			ship2.rotateRad(-0.05);
+		}
+
 	}
 
 	const shoot = () => {
@@ -110,11 +113,11 @@ window.onload = function() {
 		}
 	}
 
-	let delta = Date.now();
+	// let delta = Date.now();
 
 	const update = () => {
 		ctx.clearRect(0, 0, width, height);
-		delta = Date.now() - delta;
+		// delta = Date.now() - delta;
 
 		rotate();
 		applyThrust();
