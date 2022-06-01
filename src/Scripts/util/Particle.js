@@ -3,14 +3,14 @@ class Particle {
 	#velocity;
 	#gravity;
 
-	constructor(x, y, speed, direction, grav) {
+	constructor(x, y, speed = 0, direction = 0, grav = 0) {
 		this.#position = new Vector(x,y);
 		
 		this.#velocity = new Vector(0,0);
 		this.#velocity.setLength(speed);
 		this.#velocity.setAngle(direction);
 
-		this.#gravity = grav || 0; // grav is an optional parameter
+		this.#gravity = grav; // grav is an optional parameter
 	}
 
 	move() {
