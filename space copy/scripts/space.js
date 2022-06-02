@@ -115,6 +115,9 @@ window.onload = function() {
 
 	// let delta = Date.now();
 
+	document.onmousemove = Rocket.findCursor;
+
+
 	const update = () => {
 		ctx.clearRect(0, 0, width, height);
 		// delta = Date.now() - delta;
