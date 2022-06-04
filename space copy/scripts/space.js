@@ -33,6 +33,9 @@ window.onload = function() {
 			case " ":
 				ship2.shooting = true;
 				break;
+			case "r":
+				ship2.shootRocket();
+				break;
 		}
 	}
 
@@ -56,6 +59,7 @@ window.onload = function() {
 
 	document.onkeydown = keydown;
 	document.onkeyup = keyup;
+	document.onmousemove = Rocket.findCursor();
 
 
 	const edgeWrap = () => {
@@ -116,6 +120,7 @@ window.onload = function() {
 	// let delta = Date.now();
 
 	document.onmousemove = Rocket.findCursor;
+
 
 
 	const update = () => {

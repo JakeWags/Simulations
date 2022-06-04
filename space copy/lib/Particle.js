@@ -22,7 +22,7 @@ class Particle {
 	}
 
 	applyGravity() {
-		this.#velocity.addTo(this.#gravity);
+		this.accelerate(this.#gravity);
 	}
 
 	update() {

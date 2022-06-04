@@ -6,6 +6,7 @@ class Ship extends Particle {
 	static shipLength = 30;
 	#bullets = [];
 	#points;
+	rocket = null;
 
 	constructor(x = 50, y = 50, angle = 0, speed = 0) {
 		super(x,y,speed,angle);
@@ -83,12 +84,16 @@ class Ship extends Particle {
 
 		ctx = this.draw(ctx);
 		this.shoot();
+		if (this.rocket != null) {
+			this.rocket.update();
+		}
 
 		super.update();
 
 		ctx.restore();
 
 		this.#drawBullets(ctx);
+		this.#drawRocket(ctx);
 		this.#deleteBullets();
 	}
 
@@ -112,6 +117,16 @@ class Ship extends Particle {
 		}
 	}
 
+	shootRocket() {
+		if (this.rocket == null) {
+			//console.log("shooting Rocket");
+			this.#points = Ship.getAbsolutePoints(this.#angle, super.getX(), super.getY());
+			this.rocket = new Rocket(this.#points[0][0], this.#points[0][1], 0, 0, this.#angle);
+
+			this.rocket.computeVelocity();
+		}
+	}
+
 	#drawBullets(ctx) {
 		this.#bullets.forEach((e) => {
 			e.draw(ctx);
@@ -125,6 +140,12 @@ class Ship extends Particle {
 
 			}
 		});
+	}
+
+	#drawRocket(ctx) {
+		if(this.rocket != null) {
+			this.rocket.draw(ctx);
+		}
 	}
 
 }
