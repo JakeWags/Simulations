@@ -99,14 +99,19 @@ window.onload = function() {
 		p.accelerate(movement);
 	}
 
-	const frictionCoefficient = 0.015;
+	const frictionCoefficient = 0.020;
 	const calcFriction = () => {
 		if (isOnFloor) {
 			let fVec = new Vector(0,0);
 			if (p.getVelocity().getX() > 0) { // moving right
-				fVec.setX(0); // todo
+				fVec.setX(frictionCoefficient * -1 * p.mass); // todo
 			} else if (p.getVelocity().getX() < 0) { // moving left
-				fVec.setX(0); // todo
+				fVec.setX(frictionCoefficient * p.mass); // todo
+			}
+
+			if (Math.abs(p.getVelocity().getX()) < 0.2) {
+				p.getVelocity().setX(0);
+				return;
 			}
 			p.getVelocity().addTo(fVec);
 		}
