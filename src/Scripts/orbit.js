@@ -6,8 +6,8 @@ window.onload = function() {
 
 
 	let p1 = new Particle(width/2, height/2, 0, 0);
-	p1.mass = 5000;
-	p1.radius = 70;
+	p1.mass = 1000;
+	p1.radius = 90;
 
 	let p2 = new Particle(width/2,height/2 - 200,14,0);
 	p2.mass = 10;
@@ -26,26 +26,26 @@ window.onload = function() {
 	let tracePoints = [];
 
 
-	let gravConst = 0.035;
+	let gravConst = 0.025;
 	let grav = new Vector(0,0);
 	let grav2 = new Vector(0,0);
-
-	// F = G*(m1m2/r1r2)
-	let gravForce = (gravConst*(p1.mass*p2.mass))/(p1.radius*p1.radius);
-	let gravForce2 = (gravConst*(p1.mass*p3.mass))/(p1.radius*p1.radius);
-
 	let grav3 = new Vector(0,0);
-	let gravForce3 = (gravConst*(p2.mass*p3.mass))/(p2.radius*p2.radius);
 
-	grav.setLength(gravForce);
-	grav2.setLength(gravForce2);
-	grav3.setLength(gravForce3);
-
+	// F = G*(m1m2/r^2)
+	let gravForce, gravForce2, gravForce3;
 
 	const update = () => {
 		ctx.clearRect(0,0,width,height);
-		angleBetween = p1.angleBetween(p2);
-		grav.setAngle(angleBetween);
+
+		gravForce = (gravConst*(p1.mass*p2.mass))/(p1.distanceTo(p2));
+		gravForce2 = (gravConst*(p1.mass*p3.mass))/(p1.distanceTo(p3));
+		gravForce3 = (gravConst*(p2.mass*p3.mass))/(p2.distanceTo(p3));
+
+		grav.setLength(gravForce);
+		grav2.setLength(gravForce2);
+		grav3.setLength(gravForce3);
+
+		grav.setAngle(p1.angleBetween(p2));
 		grav2.setAngle(p1.angleBetween(p3));
 		grav3.setAngle(p2.angleBetween(p3));
 
@@ -101,6 +101,8 @@ window.onload = function() {
 
 		delta = Date.now() - t1;
 		t1 = Date.now();
+
+		console.log(`Gravitational Force between planets: ${grav3.getLength()}`);
 
 		requestAnimationFrame(update);
 	}
