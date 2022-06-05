@@ -4,6 +4,11 @@ window.onload = function() {
 	const width = canvas.width = window.innerWidth;
 	const height = canvas.height = window.innerHeight;
 
+	const update = () => {
+
+
+		requestAnimationFrame(update);
+	}
 	
-	
+	update();
 };

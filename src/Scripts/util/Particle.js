@@ -70,7 +70,7 @@ class Particle {
 		let b1 = lx1 - lx2;
 		let c1 = a1*lx1 + b1*ly1;
 		let c2 = -b1*x0 + a1*y0;
-		let det = a1*a1 + b1*b1;
+		let det = a1*a1 - -b1*b1;
 		let cx = 0,
 			cy = 0;
 
