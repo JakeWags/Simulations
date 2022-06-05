@@ -89,7 +89,7 @@ window.onload = function() {
 	}
 
 	const particleCollision = (p1,p2) => {
-		
+
 	}
 
 	const checkCollisions = (p) => {

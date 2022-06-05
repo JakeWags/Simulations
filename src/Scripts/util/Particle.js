@@ -61,6 +61,7 @@ class Particle {
 	circleCollisionCheck(p2) {
 		// closes point on a line
 		// https://ericleong.me/research/circle-circle/#the-closest-point-on-a-line-to-a-point-algorithm
+		// see circleCollision.js
 	}
 
 	static closestPointOnLine(lx1, ly1, lx2, ly2, x0, y0) {
