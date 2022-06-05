@@ -4,15 +4,10 @@ window.onload = function() {
 	const width = canvas.width = window.innerWidth;
 	const height = canvas.height = window.innerHeight;
 
-	const g = 0.04;
-
-	// let p = new Particle(width/2, height/2, 0, 0);
-	// p.radius = 10;
-	// p.mass = 10;
-	// p.setGravity(new Vector(0, p.mass * g))
+	const g = 0.6;
 
 	let particles = [];
-	const numParticles = 100;
+	const numParticles = 2000;
 
 
 	const floorHeight = height - 100;
@@ -21,15 +16,16 @@ window.onload = function() {
 	const drawBottom = () => {
 		ctx.beginPath();
 		ctx.fillStyle = "#2D3047";
-		ctx.fillRect(0, floorHeight, width, 100);
+		ctx.fillRect(0, floorHeight, width, floorHeight + height);
 	}
 
 	const generateParticles = () => {
 		for (let i = 0; i < numParticles; i++) {
-			let p = new Particle(Math.random()*width-50, Math.random()*floorHeight, Math.random()*10, Math.PI*(Math.random()*2));
-			p.radius = Math.random() * 10 + 5;
+			let r = Math.random() * 10 + 5;
+			let p = new Particle(Math.random()*width-50, Math.random()*(floorHeight-r), Math.random()*10, Math.PI*(Math.random()*2));
+			p.radius = r;
 			p.mass = Math.random() * 10 + 5;
-			p.setGravity(new Vector(0, p.mass * g))
+			p.setGravity(new Vector(0, g))
 			particles.push(p);
 		}
 	}
@@ -67,53 +63,6 @@ window.onload = function() {
 		}
 		return false;
 	}
-
-	// let left = false,
-	// 	right = false,
-	// 	jump = false,
-	// 	isOnFloor = false;
-
-	// const keydown = (e) => {
-	// 	switch (e.key) {
-	// 		case "ArrowRight":
-	// 			right = true;
-	// 			break;
-	// 		case "ArrowLeft":
-	// 			left = true;
-	// 			break;
-	// 		case " ":
-	// 			jump = true;
-	// 			break;
-	// 	}
-	// }
-
-	// const keyup = (e) => {
-	// 	switch (e.key) {
-	// 		case "ArrowRight":
-	// 			right = false;
-	// 			break;
-	// 		case "ArrowLeft":
-	// 			left = false;
-	// 			break;
-	// 		case " ":
-	// 			jump = false;
-	// 			break;
-	// 	}
-	// }
-
-	// const calcMovement = () => {
-	// 	movement.setLength(0);
-	// 	if (left) {
-	// 		movement.setX(-0.15);
-	// 	}
-	// 	if (right) {
-	// 		movement.setX(0.15);
-	// 	}
-	// 	if (jump && isOnFloor) {
-	// 		movement.setY(-6);
-	// 	}
-	// 	p.accelerate(movement);
-	// }
 
 	const frictionCoefficient = 0.020;
 	const calcFriction = (p) => {

@@ -1,5 +1,5 @@
 // define a new class: Vector
-// a class is an object which much be instanced in order to be used
+// a class is an object which must be instanced in order to be used
 // ex: let v = new Vector(10,10);
 class Vector {
 
