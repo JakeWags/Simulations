@@ -14,7 +14,9 @@ window.onload = function() {
 	c2.color = `rgb(${Math.random()*200 + 10}, ${Math.random()*200 + 20}, ${Math.random() * 200 + 30})`;
 
 	let left = false,
-		right = false;
+		right = false,
+		up = false,
+		down = false;
 
 	const keydown = (e) => {
 		switch (e.key) {
@@ -23,6 +25,12 @@ window.onload = function() {
 				break;
 			case "ArrowLeft":
 				left = true;
+				break;
+			case "ArrowUp":
+				up = true;
+				break;
+			case "ArrowDown":
+				down = true;
 				break;
 		}
 	}
@@ -35,18 +43,30 @@ window.onload = function() {
 			case "ArrowLeft":
 				left = false;
 				break;
+			case "ArrowUp":
+				up = false;
+				break;
+			case "ArrowDown":
+				down = false;
+				break;
 		}
 	}
 
 	let movement = new Vector(0,0);
 
-	const applyMovement = (c) => {
+	const applyUserInput = (c) => {
 		movement.setLength(0);
 		if (left) {
 			movement.setX(-0.15);
 		}
 		if (right) {
 			movement.setX(0.15);
+		}
+		if (up) {
+			movement.setY(-0.15);
+		}
+		if (down) {
+			movement.setY(0.15);
 		}
 		c.accelerate(movement);
 	}
@@ -94,12 +114,14 @@ window.onload = function() {
 			adjustStaticCirclePosition(c1,c2);;
 		}
 
-		applyMovement(c1);
-		c1.update();
-		c2.update();
 
 		drawCircle(c1);
 		drawCircle(c2);
+
+		applyUserInput(c1);
+		c1.update();
+		c2.update();
+
 
 		requestAnimationFrame(update);
 	}

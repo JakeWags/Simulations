@@ -7,7 +7,7 @@ window.onload = function() {
 	const g = 0.6;
 
 	let particles = [];
-	const numParticles = 2000;
+	const numParticles = 500;
 
 
 	const floorHeight = height - 100;
@@ -88,13 +88,38 @@ window.onload = function() {
 		ctx.fill();
 	}
 
-	const particleCollision = (p1,p2) => {
+	// returns true if the two given circles have overlapping radii
+	const checkStaticCollision = (c1,c2) => {
+		let A = c1.getX() - c2.getX();
+		let B = c1.getY() - c2.getY();
 
+		let R = c1.radius + c2.radius;
+
+		return Math.abs((A*A) + (B*B)) < (R*R);
+	} 
+
+	const adjustStaticCirclePosition = (c1,c2) => {
+		let midpointx = (c1.getX() + c2.getX())/2;
+		let midpointy = (c1.getY() + c2.getY())/2;
+		let dist = c1.distanceTo(c2);
+		let c1x = c1.getX();
+		let c1y = c1.getY();
+		let c2x = c2.getX();
+		let c2y = c2.getY();
+
+		c1.setX(midpointx + (c1.radius * (c1x - c2x)/dist));
+		c1.setY(midpointy + (c1.radius * (c1y - c2y)/dist));
+		c2.setX(midpointx + (c2.radius * (c2x - c1x)/dist));
+		c2.setY(midpointy + (c2.radius * (c2y - c1y)/dist));
 	}
 
 	const checkCollisions = (p) => {
-		particles.forEach(function(p2) {
-			// check collision
+		particles.forEach((e) => {
+			if (e != p) {
+				if (checkStaticCollision(p, e)) {
+					adjustStaticCirclePosition(p,e);
+				}
+			}
 		});
 	}
 
@@ -105,12 +130,15 @@ window.onload = function() {
 		particles.forEach((e) => {
 			e.isOnFloor = calcFloorCollision(e);
 			calcWallCollision(e);
+			checkCollisions(e);
 
 			calcFriction(e);
 
 			drawParticle(e);
 			e.update();
 		});
+
+
 
 		requestAnimationFrame(update);
 	}
