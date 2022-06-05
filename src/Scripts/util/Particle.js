@@ -57,4 +57,29 @@ class Particle {
 		let B = p2.getY() - this.getY();
 		return Math.sqrt((A*A)+(B*B));
 	}
+
+	circleCollisionCheck(p2) {
+		// closes point on a line
+		// https://ericleong.me/research/circle-circle/#the-closest-point-on-a-line-to-a-point-algorithm
+	}
+
+	static closestPointOnLine(lx1, ly1, lx2, ly2, x0, y0) {
+		// given point: x0 y0, line segment is from lx1 ly1 to lx2 ly2
+		let a1 = ly2 - ly1;
+		let b1 = lx1 - lx2;
+		let c1 = a1*lx1 + b1*ly1;
+		let c2 = -b1*x0 + a1*y0;
+		let det = a1*a1 + b1*b1;
+		let cx = 0,
+			cy = 0;
+
+		if (det != 0) {
+			cx = (a1*c1 - b1*c2)/det;
+			cy = (a1*c2 - -b1*c1)/det;
+		} else {
+			cx = x0;
+			cy = y0;
+		}
+		return new Vector(cx, cy);
+	}
 }

@@ -22,10 +22,10 @@ window.onload = function() {
 	const generateParticles = () => {
 		for (let i = 0; i < numParticles; i++) {
 			let r = Math.random() * 10 + 5;
-			let p = new Particle(Math.random()*width-50, Math.random()*(floorHeight-r), Math.random()*10, Math.PI*(Math.random()*2));
+			let p = new Particle(Math.random()*width-50, Math.random()*(floorHeight-r), Math.random()*10, Math.PI*(Math.random()*2), new Vector(0, g));
 			p.radius = r;
 			p.mass = Math.random() * 10 + 5;
-			p.setGravity(new Vector(0, g))
+
 			particles.push(p);
 		}
 	}
@@ -86,6 +86,16 @@ window.onload = function() {
 		ctx.beginPath();
 		ctx.arc(p.getX(), p.getY(), p.radius, 0, Math.PI*2, false);
 		ctx.fill();
+	}
+
+	const particleCollision = (p1,p2) => {
+		
+	}
+
+	const checkCollisions = (p) => {
+		particles.forEach(function(p2) {
+			// check collision
+		});
 	}
 
 	const update = () => {
