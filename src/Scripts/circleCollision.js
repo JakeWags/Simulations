@@ -6,11 +6,13 @@ window.onload = function() {
 
 	
 	// two non-moving, static circles with overlapping radii
-	let c1 = new Particle(400,200,0,0);
-	let c2 = new Particle(350,250,0,0);
+	let c1 = new Particle(150,100,2,Math.PI/5);
+	let c2 = new Particle(400,200,0,0);
 	c1.radius = 50;
+	c1.mass = 5;
 	c1.color = `rgb(${Math.random()*200 + 10}, ${Math.random()*200 + 20}, ${Math.random() * 200 + 30})`;
 	c2.radius = 50;
+	c2.mass = 5;
 	c2.color = `rgb(${Math.random()*200 + 10}, ${Math.random()*200 + 20}, ${Math.random() * 200 + 30})`;
 
 	let left = false,
@@ -89,8 +91,44 @@ window.onload = function() {
 
 		let R = c1.radius + c2.radius;
 
-		return Math.abs( ((A*A) + (B*B)) < (R*R));
+		return Math.abs(((A*A) + (B*B)) < (R*R));
 	} 
+
+	const checkDynamicStaticCollision = (c1, c2) => {
+		let c1vx = c1.getVelocity().getX();
+		let c1vy = c1.getVelocity().getY();
+		let v = Particle.distToClosestPointOnLine(c1.getX(), c1.getY(), c1.getX()+c1vx, c1.getY()+c1vy, c2.getX(), c2.getY());
+		let closestdistsq = Math.pow(v, 2);
+		
+		//console.log(closestdistsq, Math.pow(c1.radius + c2.radius, 2));
+		
+		if (closestdistsq <= Math.pow(c1.radius + c2.radius,2)) {
+			// collision
+			//console.log("collision");
+			let backdist = Math.sqrt(Math.pow(c1.radius + c2.radius, 2) - closestdistsq);
+			let d = Particle.closestPointOnLine(c1.getX(), c1.getY(), c1.getX()+c1vx, c1.getY()+c1vy, c2.getX(), c2.getY());
+			let c1VecLength = c1.getVelocity().getLength();
+			let cx = d.getX() - backdist * (c1vx / c1VecLength);
+			let cy = d.getY() - backdist * (c1vy / c1VecLength);
+			handleDynamicStaticCollision(c1, c2, cx,cy);
+		} else {
+			return new Vector(0,0);
+		}
+	}
+
+	const handleDynamicStaticCollision = (c1, c2, cx, cy) => {
+		let collisiondist = Math.sqrt(Math.pow(c2.getX() - cx, 2) + Math.pow(c2.getY() - cy, 2));
+		let nx = (c2.getX() - cx) / collisiondist;
+		let ny = (c2.getY() - cy) / collisiondist;
+		let p = 2 * (c1.getVelocity().getX() * nx + c1.getVelocity().getY() * ny) / (c1.mass + c2.mass);
+		let wx = c1.getVelocity().getX() - p * c1.mass * nx - p * c2.mass * nx;
+		let wy = c1.getVelocity().getY() - p * c1.mass * nx - p * c2.mass * ny;
+		let w = new Vector(wx, wy);
+		c1.setVelocity(w);
+
+		// let w2 = new Vector(-wx, -wy);
+		// c2.setVelocity(w2);
+	}
 
 	const adjustStaticCirclePosition = (c1,c2) => {
 		let midpointx = (c1.getX() + c2.getX())/2;
@@ -110,9 +148,16 @@ window.onload = function() {
 	const update = () => {
 		ctx.clearRect(0, 0, width, height);
 		
-		if (checkStaticCollision(c1,c2)) {
+		/* if (checkStaticCollision(c1,c2)) {
 			adjustStaticCirclePosition(c1,c2);;
-		}
+		} */
+		
+		checkDynamicStaticCollision(c1,c2);
+
+		console.log(c1.getVelocity().getLength());
+		// ctx.beginPath();
+		// ctx.arc(v2.getX(), v2.getY(), 2, 0, Math.PI * 2,false);
+		// ctx.fill();
 
 
 		drawCircle(c1);
