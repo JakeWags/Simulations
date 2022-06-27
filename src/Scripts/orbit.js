@@ -6,16 +6,16 @@ window.onload = function() {
 
 
 	let p1 = new Particle(width/2, height/2, 0, 0);
-	p1.mass = 1000;
-	p1.radius = 90;
+	p1.mass = 3000;
+	p1.radius = 30;
 
-	let p2 = new Particle(width/2,height/2 - 200,14,0);
+	let p2 = new Particle(width/2,height/2 - 100,20,0);
 	p2.mass = 10;
-	p2.radius = 10;
+	p2.radius = 6;
 
-	let p3 = new Particle(width/2, height/2 - 400, 20,0);
-	p3.mass = 20;
-	p3.radius = 20;
+	let p3 = new Particle(width/2, height/2 - 400, 25,0);
+	p3.mass = 40;
+	p3.radius = 10;
 
 
 	let angleBetween = p1.angleBetween(p2);
@@ -26,7 +26,7 @@ window.onload = function() {
 	let tracePoints = [];
 
 
-	let gravConst = 0.025;
+	let gravConst = 0.005;
 	let grav = new Vector(0,0);
 	let grav2 = new Vector(0,0);
 	let grav3 = new Vector(0,0);
@@ -75,14 +75,14 @@ window.onload = function() {
 		tracePoints.push([p2.getPosition().getX(), p2.getPosition().getY()]);
 		tracePoints.push([p3.getPosition().getX(), p3.getPosition().getY()]);
 
-		if (tracePoints.length > 200) {
+		if (tracePoints.length > 400) {
 			tracePoints.shift();
 			tracePoints.shift();
 		}
 
 		tracePoints.forEach(function(point) {
 			ctx.beginPath();
-			ctx.arc(point[0], point[1], 2, 0, Math.PI*2, false);
+			ctx.arc(point[0], point[1], 1, 0, Math.PI*2, false);
 			ctx.fillStyle = "black";
 			ctx.fill();
 		});
@@ -101,8 +101,6 @@ window.onload = function() {
 
 		delta = Date.now() - t1;
 		t1 = Date.now();
-
-		console.log(`Gravitational Force between planets: ${grav3.getLength()}`);
 
 		requestAnimationFrame(update);
 	}

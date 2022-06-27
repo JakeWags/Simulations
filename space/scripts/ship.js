@@ -4,7 +4,7 @@ class Ship extends Particle {
 	hasShot = false;
 	thrusting = false;
 	static shipLength = 30;
-	#bullets = [];
+	static bullets = [];
 	#points;
 
 	constructor(x = 50, y = 50, angle = 0, speed = 0) {
@@ -107,24 +107,38 @@ class Ship extends Particle {
 		if (this.shooting && !this.hasShot) {
 			let bVel = this.#computeBulletVelocity();
 			this.#points = Ship.getAbsolutePoints(this.#angle, super.getX(), super.getY());
-			this.#bullets.push(new Bullet(this.#points[0][0], this.#points[0][1], bVel.getLength(), bVel.getAngle(), this.#angle));
+			Ship.bullets.push(new Bullet(this.#points[0][0], this.#points[0][1], bVel.getLength(), bVel.getAngle(), this.#angle));
 			this.hasShot = true;
 		}
 	}
 
 	#drawBullets(ctx) {
-		this.#bullets.forEach((e) => {
+		Ship.bullets.forEach((e) => {
 			e.draw(ctx);
+			if (e.checkAsteroidCollision()) {
+				this.deleteBullet(e);
+			}
 		});
 	}
 
 	#deleteBullets() {
-		this.#bullets.forEach((e) => {
+		Ship.bullets.forEach((e) => {
 			if (e.getX() > window.innerWidth || e.getX() < 0 || e.getY() < 0 || e.getY() > window.innerHeight) {
-				this.#bullets = this.#bullets.filter(b => b !== e); // filter the array for everything other than the bullet to delete
-
+				Ship.bullets = Ship.bullets.filter(b => b !== e); // filter the array for everything other than the bullet to delete
 			}
 		});
+	}
+
+	deleteBullet(b) {
+		Ship.bullets = Ship.bullets.filter(e => e !== b); // filter the array for everything other than the bullet to delete
+	}
+
+	getBullets() {
+		return Ship.bullets;
+	}
+
+	checkAsteroidCollision(asteroids) {
+		
 	}
 
 }

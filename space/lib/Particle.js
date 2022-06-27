@@ -36,6 +36,10 @@ class Particle {
 	getX() { return this.#position.getX(); }
 	getY() { return this.#position.getY(); }
 	getSpeed() { return this.#velocity.getLength(); }
+	
+	setX(x) { this.#position.setX(x); }
+	setY(y) { this.#position.setY(y); }
+
 	// angle between the particle and an x and y coordinate
 	angleBetweenPoint(x, y) {
 		return Math.atan2(this.#position.getX() - y, this.#position.getX() - x);
